@@ -8,58 +8,73 @@ from tkinter.ttk import Combobox, Scrollbar, Treeview
 from time import sleep
 
 
-class Interface(Tk):
+class Interface:
     def __init__(self):
-        super().__init__()
-        self.geometry("800x500+400+200")
-        self.title("Симуляция обработки процессов")
-
-        self.modes = ["FCFS", "RR", "SJF", "PSJF_PSJF", "RR_SJF"]
-        self.combobox = Combobox(self, values=self.modes, state="readonly")
-
-        self.processes_frame = Frame(self, bg="#cccccc", bd=5, relief=SUNKEN, width=400, height=250)
-
-        self.data = [("1","и", "г" ), ("2","и", "г")]
-        self.table = Treeview(self.processes_frame, show="headings")
-
+        self.root = Tk()
+        self.root.geometry("800x500+400+200")
+        self.root.title("Симуляция обработки процессов")
         self.run()
 
     def run(self):
-        self.draw_widgets()
-        self.mainloop()
+        self.create_widgets()
+        self.root.mainloop()
 
-        sleep(1)
-        self.table.insert("", "end", values=('1', 'и', 'г'))
-        self.table.update()
-    def draw_widgets(self):
+    def create_widgets(self):
+        self.processes_frame = Frame(self.root, bd=5, relief=SUNKEN)
+        self.bottom_frame = Frame(self.root)
+
+        self.modes = ["FCFS", "RR", "SJF", "PSJF_PSJF", "RR_SJF"]
+        self.combobox = Combobox(self.bottom_frame, values=self.modes, state="readonly")
         self.combobox.current(0)
-        self.combobox.pack(side=RIGHT)
         self.combobox.bind("<<ComboboxSelected>>", self.mode_change)
 
-        self.processes_frame.pack(anchor="ne")
-        self.test()
+        self.entry_box = Entry(self.bottom_frame, font=("Arial", 10))
+
+        self.data = [("Процесс1", "И","И", "И") * 10]
+        self.create_table()
+
+        self.processes_frame.pack(fill=X)
+        self.bottom_frame.pack(anchor=NW)
+        Label(self.bottom_frame, text="Выбор режима").grid(row=0, column=0)
+        self.combobox.grid(row=1, column=0)
+        Label(self.bottom_frame, text="Процессорное время").grid(row=0, column=1)
+        self.entry_box.grid(row=1, column=1)
+        Button.
+
+
+    def create_table(self):
+        heads = ["Процесс"]
+        if self.data:
+            for i in range(1, len(self.data[-1]) + 1):
+                heads.append(i)
+        self.table = Treeview(self.processes_frame, show="headings", columns=heads)
+        for header in heads:
+            self.table.heading(header, text=header, anchor=W)
+            if header != "Процесс":
+                self.table.column(f"#{header + 1}", stretch=NO, width=30)
+            else:
+                self.table.column(f"#1", stretch=NO, width=60)
+
+        for row in self.data:
+            self.table.insert("", "end", values=row)
+        self.scrollbar_y = Scrollbar(self.processes_frame, orient="vertical", command=self.table.yview)
+        self.table.configure(yscrollcommand=self.scrollbar_y.set)
+        self.scrollbar_y.pack(side=RIGHT, fill=Y)
+        self.scrollbar_x = Scrollbar(self.processes_frame, orient="horizontal", command=self.table.xview)
+        self.table.configure(xscrollcommand=self.scrollbar_x.set)
+        self.scrollbar_x.pack(side=BOTTOM, fill=X)
+        self.table.pack(anchor=SW)
+
+    def refresh_table(self):
+        self.table.destroy()
+        self.scrollbar_x.destroy()
+        self.scrollbar_y.destroy()
+        self.create_table()
 
     def mode_change(self, event):
         mode = self.combobox.get()
         print(f"режим сменён на  {mode}")
         #смена режима
-
-    def test(self):
-        heads = ["Процесс"]
-        for i in range(1, len(self.data[-1]) + 1):
-            heads.append(i)
-        self.table["columns"] = heads
-        for header in heads:
-            self.table.heading(header, text=header, anchor=W)
-        for i, row in enumerate(self.data):
-            self.table.insert("", "end", values=row)
-        scrollbary = Scrollbar(self.processes_frame, orient="vertical", command=self.table.yview)
-        self.table.configure(yscrollcommand=scrollbary.set)
-        scrollbary.pack(side=RIGHT, fill=Y)
-        scrollbarx = Scrollbar(self.processes_frame, orient="horizontal", command=self.table.xview)
-        self.table.configure(xscrollcommand=scrollbarx.set)
-        scrollbarx.pack(side=BOTTOM, fill=X)
-        self.table.pack(expand=YES, fill=BOTH)
 
 
 def main():
