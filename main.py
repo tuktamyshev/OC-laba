@@ -19,9 +19,6 @@ class Interface:
         self.create_widgets()
         self.root.mainloop()
 
-    def submit(self):
-        pass
-
     def create_widgets(self):
         self.processes_frame = Frame(self.root, bd=5, relief=SUNKEN)
         self.bottom_frame = Frame(self.root)
@@ -36,15 +33,20 @@ class Interface:
         self.data = [("Процесс1", "И","И", "И") * 10]
         self.create_table()
 
-        self.submit_botton = Button(self.bottom_frame, text="Добавить процесс", font=30, command=submit)
+        self.submit_botton = Button(self.bottom_frame, text="Добавить процесс", font=30, command=self.submit)
+        self.reset_button = Button(self.bottom_frame, text="Сбросить процессы", font=30, command=self.reset)
 
         self.processes_frame.pack(fill=X)
         self.bottom_frame.pack(anchor=NW)
         Label(self.bottom_frame, text="Выбор режима", font=30).grid(row=0, column=0, padx=10, pady=10)
         self.combobox.grid(row=1, column=0, padx=10, pady=10)
-        Label(self.bottom_frame, text="Процессорное время", font=30).grid(row=0, column=1, padx=100, pady=10)
-        self.entry_box.grid(row=1, column=1, padx=100, pady=10)
+        Label(self.bottom_frame, text="Процессорное время", font=30).grid(row=0, column=1, padx=50, pady=10)
+        self.entry_box.grid(row=1, column=1, padx=50, pady=10)
         self.submit_botton.grid(row=2, column=1, padx=10, pady=10)
+        self.reset_button.grid(row=3, column=1, padx=10, pady=10)
+        Label(self.bottom_frame, text="Среднее время ожидания: ").grid(row=0, column=2, padx=10, pady=10)
+        Label(self.bottom_frame, text="Среднее время выполнения: ").grid(row=1, column=2, padx=10, pady=10)
+
     def create_table(self):
         heads = ["Процесс"]
         if self.data:
@@ -79,7 +81,11 @@ class Interface:
         print(f"режим сменён на  {mode}")
         #смена режима
 
+    def submit(self):
+        pass
 
+    def reset(self):
+        pass
 
 
 def main():
