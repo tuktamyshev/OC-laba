@@ -19,33 +19,36 @@ class Interface:
         self.create_widgets()
         self.root.mainloop()
 
+    def submit(self):
+        pass
+
     def create_widgets(self):
         self.processes_frame = Frame(self.root, bd=5, relief=SUNKEN)
         self.bottom_frame = Frame(self.root)
 
         self.modes = ["FCFS", "RR", "SJF", "PSJF_PSJF", "RR_SJF"]
-        self.combobox = Combobox(self.bottom_frame, values=self.modes, state="readonly")
+        self.combobox = Combobox(self.bottom_frame, values=self.modes, state="readonly", font=10, width=8)
         self.combobox.current(0)
         self.combobox.bind("<<ComboboxSelected>>", self.mode_change)
 
-        self.entry_box = Entry(self.bottom_frame, font=("Arial", 10))
+        self.entry_box = Entry(self.bottom_frame, font=("Arial", 30), width=5)
 
         self.data = [("Процесс1", "И","И", "И") * 10]
         self.create_table()
 
+        self.submit_botton = Button(self.bottom_frame, text="Добавить процесс", font=30, command=submit)
+
         self.processes_frame.pack(fill=X)
         self.bottom_frame.pack(anchor=NW)
-        Label(self.bottom_frame, text="Выбор режима").grid(row=0, column=0)
-        self.combobox.grid(row=1, column=0)
-        Label(self.bottom_frame, text="Процессорное время").grid(row=0, column=1)
-        self.entry_box.grid(row=1, column=1)
-        Button.
-
-
+        Label(self.bottom_frame, text="Выбор режима", font=30).grid(row=0, column=0, padx=10, pady=10)
+        self.combobox.grid(row=1, column=0, padx=10, pady=10)
+        Label(self.bottom_frame, text="Процессорное время", font=30).grid(row=0, column=1, padx=100, pady=10)
+        self.entry_box.grid(row=1, column=1, padx=100, pady=10)
+        self.submit_botton.grid(row=2, column=1, padx=10, pady=10)
     def create_table(self):
         heads = ["Процесс"]
         if self.data:
-            for i in range(1, len(self.data[-1]) + 1):
+            for i in range(1, len(self.data[-1])):
                 heads.append(i)
         self.table = Treeview(self.processes_frame, show="headings", columns=heads)
         for header in heads:
@@ -75,6 +78,8 @@ class Interface:
         mode = self.combobox.get()
         print(f"режим сменён на  {mode}")
         #смена режима
+
+
 
 
 def main():
