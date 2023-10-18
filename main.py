@@ -38,8 +38,8 @@ class Interface:
 
         self.calculate_button = Button(self.bottom_frame, text="Вычислить", font=30, command=self.calculate)
 
-        self.wait_time = Label(self.bottom_frame, text="1")
-        self.execute_time = Label(self.bottom_frame, text="1")
+        self.wait_time = Label(self.bottom_frame, text="")
+        self.execute_time = Label(self.bottom_frame, text="")
 
         self.processes_frame.pack(fill=X)
         self.bottom_frame.pack(anchor=NW)
@@ -66,10 +66,9 @@ class Interface:
             self.data_for_table = RR_SJF.work_with_data(self.entered_data)
         elif current_mode == "SJF":
             self.data_for_table = SJF.work_with_data(self.entered_data)
-
         heads = ["Процесс"]
         if self.entered_data:
-            for i in range(1, len(self.data_for_table) + 1):
+            for i in range(1, sum(self.entered_data) + 1):
                 heads.append(i)
         self.table = Treeview(self.processes_frame, show="headings", columns=heads)
         for header in heads:
@@ -77,10 +76,9 @@ class Interface:
             if header != "Процесс":
                 self.table.column(f"#{header + 1}", stretch=NO, width=30)
             else:
-                self.table.column(f"#1", stretch=NO, width=60)
+                self.table.column(f"#1", stretch=NO, width=70)
 
         for row in self.data_for_table:
-            print(row)
             self.table.insert("", "end", values=row)
 
         self.scrollbar_y = Scrollbar(self.processes_frame, orient="vertical", command=self.table.yview)
@@ -121,15 +119,17 @@ class Interface:
     def calculate(self):
         current_mode = self.combobox.get()
         if current_mode == "FCFS":
-            calculated_data = FCFS.calculate(self.data_for_table)
+            calculated_data = FCFS.calculate(self.entered_data)
+            self.wait_time.config(text=f"{calculated_data[0]}")
+            self.execute_time.config(text=f"{calculated_data[1]}")
         elif current_mode == "RR":
-            calculated_data = RR.calculate(self.data_for_table)
+            entered_data = RR.calculate(self.data_for_table)
         elif current_mode == "PSJF_PSJF":
-            calculated_data = PSJF_PSJF.calculate(self.data_for_table)
+            entered_data = PSJF_PSJF.calculate(self.data_for_table)
         elif current_mode == "RR_SJF":
-            calculated_data = RR_SJF.calculate(self.data_for_table)
+            entered_data = RR_SJF.calculate(self.data_for_table)
         elif current_mode == "SJF":
-            calculated_data = SJF.calculate(self.data_for_table)
+            entered_data = SJF.calculate(self.data_for_table)
 
 
 def main():
