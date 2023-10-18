@@ -1,9 +1,9 @@
 def work_with_data(data):
-    data_for_table = []
+    data_for_table = [[f"Процесс {i}"] for i in range(1, len(data) + 1)]
     count_wait_time = 0
-    for i, process_time in enumerate(data, start=1):
+    for i, process_time in enumerate(data):
         s = "Г" * count_wait_time + "И" * process_time
-        data_for_table.append([f"Процесс {i}"] + list(s))
+        data_for_table[i] += list(s)
         count_wait_time = len(s)
     return data_for_table
 

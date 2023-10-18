@@ -54,22 +54,25 @@ class Interface:
         self.calculate_button.grid(row=2, column=2, padx=10, pady=10)
         self.wait_time.grid(row=0, column=3)
         self.execute_time.grid(row=1, column=3)
+
     def create_table(self):
         current_mode = self.combobox.get()
+        data_to_conversion = [i for i in self.entered_data]
         if current_mode == "FCFS":
-            self.data_for_table = FCFS.work_with_data(self.entered_data)
+            self.data_for_table = FCFS.work_with_data(data_to_conversion)
         elif current_mode == "RR":
-            self.data_for_table = RR.work_with_data(self.entered_data)
+            self.data_for_table = RR.work_with_data(data_to_conversion)
         elif current_mode == "PSJF_PSJF":
-            self.data_for_table = PSJF_PSJF.work_with_data(self.entered_data)
+            self.data_for_table = PSJF_PSJF.work_with_data(data_to_conversion)
         elif current_mode == "RR_SJF":
-            self.data_for_table = RR_SJF.work_with_data(self.entered_data)
+            self.data_for_table = RR_SJF.work_with_data(data_to_conversion)
         elif current_mode == "SJF":
-            self.data_for_table = SJF.work_with_data(self.entered_data)
+            self.data_for_table = SJF.work_with_data(data_to_conversion)
         heads = ["Процесс"]
         if self.entered_data:
             for i in range(1, sum(self.entered_data) + 1):
                 heads.append(i)
+
         self.table = Treeview(self.processes_frame, show="headings", columns=heads)
         for header in heads:
             self.table.heading(header, text=header, anchor=W)
@@ -80,7 +83,6 @@ class Interface:
 
         for row in self.data_for_table:
             self.table.insert("", "end", values=row)
-
         self.scrollbar_y = Scrollbar(self.processes_frame, orient="vertical", command=self.table.yview)
         self.table.configure(yscrollcommand=self.scrollbar_y.set)
         self.scrollbar_y.pack(side=RIGHT, fill=Y)
@@ -122,14 +124,15 @@ class Interface:
             calculated_data = FCFS.calculate(self.entered_data)
             self.wait_time.config(text=f"{calculated_data[0]}")
             self.execute_time.config(text=f"{calculated_data[1]}")
+            return
         elif current_mode == "RR":
-            entered_data = RR.calculate(self.data_for_table)
+            calculated_data = RR.calculate(self.data_for_table)
         elif current_mode == "PSJF_PSJF":
-            entered_data = PSJF_PSJF.calculate(self.data_for_table)
+            calculated_data = PSJF_PSJF.calculate(self.data_for_table)
         elif current_mode == "RR_SJF":
-            entered_data = RR_SJF.calculate(self.data_for_table)
+            calculated_data = RR_SJF.calculate(self.data_for_table)
         elif current_mode == "SJF":
-            entered_data = SJF.calculate(self.data_for_table)
+            calculated_data = SJF.calculate(self.data_for_table)
 
 
 def main():
