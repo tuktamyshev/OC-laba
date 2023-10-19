@@ -11,7 +11,7 @@ from time import sleep
 class Interface:
     def __init__(self):
         self.root = Tk()
-        self.root.geometry("800x500+400+200")
+        self.root.geometry("800x600+400+200")
         self.root.title("Симуляция обработки процессов")
         self.run()
 
@@ -46,8 +46,8 @@ class Interface:
         self.reactivity_ratio_R = Label(self.bottom_frame, text="")#среднее отношение реактивности R
         self.penalty_ratio_P = Label(self.bottom_frame, text="") #среднее штрафное отношение P
 
-        self.processes_frame.grid(row=0, column=0, sticky=W)
-        self.bottom_frame.grid(row=1, column=0)
+        self.processes_frame.pack(fill=X)
+        self.bottom_frame.pack(anchor=NW)
         Label(self.bottom_frame, text="Выбор режима", font=30).grid(row=0, column=0, padx=10, pady=10)
         self.combobox.grid(row=1, column=0, padx=10, pady=10)
         Label(self.bottom_frame, text="Процессорное время", font=30).grid(row=0, column=1, padx=50)
@@ -103,16 +103,22 @@ class Interface:
 
     def mode_change(self, event):
         if self.combobox.get() == "FCFS":
-            self.calculate_button.destroy()
-            self.total_execution_time_T.destroy()
-            self.lost_time_M.destroy()
-            self.reactivity_ratio_R.destroy()
-            self.penalty_ratio_P.destroy()
+            self.T_label.grid_forget()
+            self.M_label.grid_forget()
+            self.R_label.grid_forget()
+            self.P_label.grid_forget()
+            self.calculate_button.grid_forget()
+            self.total_execution_time_T.grid_forget()
+            self.lost_time_M.grid_forget()
+            self.reactivity_ratio_R.grid_forget()
+            self.penalty_ratio_P.grid_forget()
             self.widgets_for_FCFS()
         else:
-            self.calculate_button.destroy()
-            self.wait_time.destroy()
-            self.execute_time.destroy()
+            self.wait_time_label.grid_forget()
+            self.execute_time_label.grid_forget()
+            self.calculate_button.grid_forget()
+            self.wait_time.grid_forget()
+            self.execute_time.grid_forget()
             self.widgets_for_others()
         self.refresh_table()
 
@@ -133,19 +139,25 @@ class Interface:
         self.penalty_ratio_P.config(text="")
 
     def widgets_for_FCFS(self):
-        Label(self.bottom_frame, text="Среднее время ожидания: ").grid(row=0, column=2)
-        Label(self.bottom_frame, text="Среднее время выполнения: ").grid(row=1, column=2)
+        self.wait_time_label = Label(self.bottom_frame, text="Среднее время ожидания: ")
+        self.execute_time_label = Label(self.bottom_frame, text="Среднее время выполнения: ")
+        self.wait_time_label.grid(row=0, column=2)
+        self.execute_time_label.grid(row=1, column=2)
         self.calculate_button.grid(row=2, column=2, padx=10, pady=10)
         self.wait_time.grid(row=0, column=3)
         self.execute_time.grid(row=1, column=3)
 
 
     def widgets_for_others(self):
-        Label(self.bottom_frame, text="Среднее общее время пребывания(T): ").grid(row=0, column=2)
-        Label(self.bottom_frame, text="Среднее потерянное время(M): ").grid(row=1, column=2)
-        Label(self.bottom_frame, text="Среднее отношение реактивности(R): ").grid(row=3, column=2)
-        Label(self.bottom_frame, text="Среднее штрафное отношение(P): ").grid(row=4, column=2)
-        self.calculate_button.grid(row=0, column=3, padx=10, pady=10)
+        self.T_label = Label(self.bottom_frame, text="Среднее общее время пребывания(T): ")
+        self.M_label = Label(self.bottom_frame, text="Среднее потерянное время(M): ")
+        self.R_label = Label(self.bottom_frame, text="Среднее отношение реактивности(R): ")
+        self.P_label = Label(self.bottom_frame, text="Среднее штрафное отношение(P): ")
+        self.T_label.grid(row=0, column=2)
+        self.M_label.grid(row=1, column=2)
+        self.R_label.grid(row=2, column=2)
+        self.P_label.grid(row=3, column=2)
+        self.calculate_button.grid(row=4, column=2, padx=10, pady=10)
         self.total_execution_time_T.grid(row=0, column=3)
         self.lost_time_M.grid(row=1, column=3)
         self.reactivity_ratio_R.grid(row=2, column=3)
@@ -160,6 +172,8 @@ class Interface:
 
     def calculate(self):
         current_mode = self.combobox.get()
+        if not self.entered_data:
+            return
         if current_mode == "FCFS":
             calculated_data = FCFS.calculate(self.entered_data)
             self.wait_time.config(text=f"{calculated_data[0]}")
@@ -173,6 +187,7 @@ class Interface:
             calculated_data = RR_SJF.calculate(self.data_for_table)
         elif current_mode == "SJF":
             calculated_data = SJF.calculate(self.data_for_table)
+
 
 
 def main():
