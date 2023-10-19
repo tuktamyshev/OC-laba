@@ -30,7 +30,7 @@ class Interface:
 
         self.entry_box = Entry(self.bottom_frame, font=("Arial", 30), width=5)
 
-        self.entered_data = []
+        self.entered_data = {}
         self.create_table()
 
         self.submit_botton = Button(self.bottom_frame, text="Добавить процесс", font=30, command=self.submit)
@@ -58,7 +58,7 @@ class Interface:
 
     def create_table(self):
         current_mode = self.combobox.get()
-        data_to_conversion = [i for i in self.entered_data]
+        data_to_conversion = {i: v for i, v in self.entered_data.items()}
         if current_mode == "FCFS":
             self.data_for_table = FCFS.work_with_data(data_to_conversion)
         elif current_mode == "RR":
@@ -71,7 +71,7 @@ class Interface:
             self.data_for_table = SJF.work_with_data(data_to_conversion)
         heads = ["Процесс"]
         if self.entered_data:
-            for i in range(1, sum(self.entered_data) + 1):
+            for i in range(1, sum(self.entered_data.values()) + 1):
                 heads.append(i)
 
         self.table = Treeview(self.processes_frame, show="headings", columns=heads)
@@ -102,32 +102,35 @@ class Interface:
         self.create_table()
 
     def mode_change(self, event):
-        if self.combobox.get() == "FCFS":
-            self.T_label.grid_forget()
-            self.M_label.grid_forget()
-            self.R_label.grid_forget()
-            self.P_label.grid_forget()
-            self.calculate_button.grid_forget()
-            self.total_execution_time_T.grid_forget()
-            self.lost_time_M.grid_forget()
-            self.reactivity_ratio_R.grid_forget()
-            self.penalty_ratio_P.grid_forget()
-            self.widgets_for_FCFS()
-        else:
-            self.wait_time_label.grid_forget()
-            self.execute_time_label.grid_forget()
-            self.calculate_button.grid_forget()
-            self.wait_time.grid_forget()
-            self.execute_time.grid_forget()
-            self.widgets_for_others()
-        self.refresh_table()
+        try:
+            if self.combobox.get() == "FCFS":
+                self.T_label.grid_forget()
+                self.M_label.grid_forget()
+                self.R_label.grid_forget()
+                self.P_label.grid_forget()
+                self.calculate_button.grid_forget()
+                self.total_execution_time_T.grid_forget()
+                self.lost_time_M.grid_forget()
+                self.reactivity_ratio_R.grid_forget()
+                self.penalty_ratio_P.grid_forget()
+                self.widgets_for_FCFS()
+            else:
+                self.wait_time_label.grid_forget()
+                self.execute_time_label.grid_forget()
+                self.calculate_button.grid_forget()
+                self.wait_time.grid_forget()
+                self.execute_time.grid_forget()
+                self.widgets_for_others()
+            self.refresh_table()
+        except AttributeError:
+            return
 
     def submit(self):
         process_time = self.entry_box.get()
         self.entry_box.delete(0, END)
         if process_time.isdigit():
             self.clear_results()
-            self.entered_data.append(int(process_time))
+            self.entered_data[len(self.entered_data) + 1] = int(process_time)
             self.refresh_table()
 
     def clear_results(self):
@@ -165,7 +168,7 @@ class Interface:
 
 
     def reset(self):
-        self.entered_data = []
+        self.entered_data = {}
         self.data_for_table = []
         self.refresh_table()
         pass
