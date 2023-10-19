@@ -38,22 +38,23 @@ class Interface:
 
         self.calculate_button = Button(self.bottom_frame, text="Вычислить", font=30, command=self.calculate)
 
-        self.wait_time = Label(self.bottom_frame, text="")
-        self.execute_time = Label(self.bottom_frame, text="")
+        self.wait_time = Label(self.bottom_frame, text="") #средне время ожидания
+        self.execute_time = Label(self.bottom_frame, text="") #среднее время выполнения
 
-        self.processes_frame.pack(fill=X)
-        self.bottom_frame.pack(anchor=NW)
+        self.total_execution_time_T = Label(self.bottom_frame, text="") #среднее общее время пребывания T
+        self.lost_time_M = Label(self.bottom_frame, text="") #среднее потерянное время M
+        self.reactivity_ratio_R = Label(self.bottom_frame, text="")#среднее отношение реактивности R
+        self.penalty_ratio_P = Label(self.bottom_frame, text="") #среднее штрафное отношение P
+
+        self.processes_frame.grid(row=0, column=0, sticky=W)
+        self.bottom_frame.grid(row=1, column=0)
         Label(self.bottom_frame, text="Выбор режима", font=30).grid(row=0, column=0, padx=10, pady=10)
         self.combobox.grid(row=1, column=0, padx=10, pady=10)
         Label(self.bottom_frame, text="Процессорное время", font=30).grid(row=0, column=1, padx=50)
         self.entry_box.grid(row=1, column=1, padx=50, pady=10)
         self.submit_botton.grid(row=2, column=1, padx=10, pady=10)
         self.reset_button.grid(row=3, column=1, padx=10, pady=10)
-        Label(self.bottom_frame, text="Среднее время ожидания: ").grid(row=0, column=2)
-        Label(self.bottom_frame, text="Среднее время выполнения: ").grid(row=1, column=2)
-        self.calculate_button.grid(row=2, column=2, padx=10, pady=10)
-        self.wait_time.grid(row=0, column=3)
-        self.execute_time.grid(row=1, column=3)
+        self.widgets_for_FCFS()
 
     def create_table(self):
         current_mode = self.combobox.get()
@@ -94,23 +95,62 @@ class Interface:
         self.table.pack(anchor=SW)
 
     def refresh_table(self):
+        self.clear_results()
         self.table.destroy()
         self.scrollbar_x.destroy()
         self.scrollbar_y.destroy()
         self.create_table()
 
     def mode_change(self, event):
-        # смена режима
+        if self.combobox.get() == "FCFS":
+            self.calculate_button.destroy()
+            self.total_execution_time_T.destroy()
+            self.lost_time_M.destroy()
+            self.reactivity_ratio_R.destroy()
+            self.penalty_ratio_P.destroy()
+            self.widgets_for_FCFS()
+        else:
+            self.calculate_button.destroy()
+            self.wait_time.destroy()
+            self.execute_time.destroy()
+            self.widgets_for_others()
         self.refresh_table()
 
     def submit(self):
         process_time = self.entry_box.get()
         self.entry_box.delete(0, END)
         if process_time.isdigit():
+            self.clear_results()
             self.entered_data.append(int(process_time))
             self.refresh_table()
-            self.wait_time.config(text="")
-            self.execute_time.config(text="")
+
+    def clear_results(self):
+        self.wait_time.config(text="")
+        self.execute_time.config(text="")
+        self.total_execution_time_T.config(text="")
+        self.lost_time_M.config(text="")
+        self.reactivity_ratio_R.config(text="")
+        self.penalty_ratio_P.config(text="")
+
+    def widgets_for_FCFS(self):
+        Label(self.bottom_frame, text="Среднее время ожидания: ").grid(row=0, column=2)
+        Label(self.bottom_frame, text="Среднее время выполнения: ").grid(row=1, column=2)
+        self.calculate_button.grid(row=2, column=2, padx=10, pady=10)
+        self.wait_time.grid(row=0, column=3)
+        self.execute_time.grid(row=1, column=3)
+
+
+    def widgets_for_others(self):
+        Label(self.bottom_frame, text="Среднее общее время пребывания(T): ").grid(row=0, column=2)
+        Label(self.bottom_frame, text="Среднее потерянное время(M): ").grid(row=1, column=2)
+        Label(self.bottom_frame, text="Среднее отношение реактивности(R): ").grid(row=3, column=2)
+        Label(self.bottom_frame, text="Среднее штрафное отношение(P): ").grid(row=4, column=2)
+        self.calculate_button.grid(row=0, column=3, padx=10, pady=10)
+        self.total_execution_time_T.grid(row=0, column=3)
+        self.lost_time_M.grid(row=1, column=3)
+        self.reactivity_ratio_R.grid(row=2, column=3)
+        self.penalty_ratio_P.grid(row=3, column=3)
+
 
     def reset(self):
         self.entered_data = []
