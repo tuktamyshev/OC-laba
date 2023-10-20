@@ -17,4 +17,4 @@ def calculate(data):
         sum_wait_time += wait_time
         wait_time += i
 
-    return ["{:.2f}".format(sum_wait_time/len(data)), "{:.2f}".format(sum_execute_time//len(data))]
+    return [round(sum_wait_time/len(data), 2), round(sum_execute_time/len(data), 2)]

@@ -11,7 +11,7 @@ from time import sleep
 class Interface:
     def __init__(self):
         self.root = Tk()
-        self.root.geometry("800x600+400+200")
+        self.root.geometry("800x600+400+100")
         self.root.title("Симуляция обработки процессов")
         self.run()
 
@@ -24,7 +24,7 @@ class Interface:
         self.bottom_frame = Frame(self.root)
 
         self.modes = ["FCFS", "RR", "SJF", "PSJF_PSJF", "RR_SJF"]
-        self.combobox = Combobox(self.bottom_frame, values=self.modes, state="readonly", font=10, width=8)
+        self.combobox = Combobox(self.bottom_frame, values=self.modes, state="readonly", font=10, width=10)
         self.combobox.current(0)
         self.combobox.bind("<<ComboboxSelected>>", self.mode_change)
 
@@ -190,6 +190,11 @@ class Interface:
             calculated_data = RR_SJF.calculate(self.data_for_table)
         elif current_mode == "SJF":
             calculated_data = SJF.calculate(self.data_for_table)
+        self.total_execution_time_T.config(text=f"{calculated_data[0]}")
+        self.lost_time_M.config(text=f"{calculated_data[1]}")
+        self.reactivity_ratio_R.config(text=f"{calculated_data[2]}")
+        self.penalty_ratio_P.config(text=f"{calculated_data[3]}")
+
 
 
 
