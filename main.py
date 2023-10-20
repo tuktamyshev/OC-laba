@@ -1,7 +1,7 @@
 import FCFS
 import RR
 import SJF
-import PSJF_PSJF
+import PSJF
 import RR_SJF
 from tkinter import *
 from tkinter.ttk import Combobox, Scrollbar, Treeview
@@ -23,7 +23,7 @@ class Interface:
         self.processes_frame = Frame(self.root, bd=5, relief=SUNKEN)
         self.bottom_frame = Frame(self.root)
 
-        self.modes = ["FCFS", "RR", "SJF", "PSJF_PSJF", "RR_SJF"]
+        self.modes = ["FCFS", "RR", "SJF", "PSJF", "RR_SJF"]
         self.combobox = Combobox(self.bottom_frame, values=self.modes, state="readonly", font=10, width=10)
         self.combobox.current(0)
         self.combobox.bind("<<ComboboxSelected>>", self.mode_change)
@@ -63,8 +63,8 @@ class Interface:
             self.data_for_table = FCFS.work_with_data(data_to_conversion)
         elif current_mode == "RR":
             self.data_for_table = RR.work_with_data(data_to_conversion)
-        elif current_mode == "PSJF_PSJF":
-            self.data_for_table = PSJF_PSJF.work_with_data(data_to_conversion)
+        elif current_mode == "PSJF":
+            self.data_for_table = PSJF.work_with_data(data_to_conversion)
         elif current_mode == "RR_SJF":
             self.data_for_table = RR_SJF.work_with_data(data_to_conversion)
         elif current_mode == "SJF":
@@ -187,8 +187,6 @@ class Interface:
             self.lost_time_M.config(text=f"{calculated_data[1]}")
             self.reactivity_ratio_R.config(text=f"{calculated_data[2]}")
             self.penalty_ratio_P.config(text=f"{calculated_data[3]}")
-
-
 
 
 def main():
