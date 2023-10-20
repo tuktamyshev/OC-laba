@@ -181,19 +181,12 @@ class Interface:
             calculated_data = FCFS.calculate(self.entered_data)
             self.wait_time.config(text=f"{calculated_data[0]}")
             self.execute_time.config(text=f"{calculated_data[1]}")
-            return
-        elif current_mode == "RR":
+        else:
             calculated_data = RR.calculate(self.data_for_table)
-        elif current_mode == "PSJF_PSJF":
-            calculated_data = PSJF_PSJF.calculate(self.data_for_table)
-        elif current_mode == "RR_SJF":
-            calculated_data = RR_SJF.calculate(self.data_for_table)
-        elif current_mode == "SJF":
-            calculated_data = SJF.calculate(self.data_for_table)
-        self.total_execution_time_T.config(text=f"{calculated_data[0]}")
-        self.lost_time_M.config(text=f"{calculated_data[1]}")
-        self.reactivity_ratio_R.config(text=f"{calculated_data[2]}")
-        self.penalty_ratio_P.config(text=f"{calculated_data[3]}")
+            self.total_execution_time_T.config(text=f"{calculated_data[0]}")
+            self.lost_time_M.config(text=f"{calculated_data[1]}")
+            self.reactivity_ratio_R.config(text=f"{calculated_data[2]}")
+            self.penalty_ratio_P.config(text=f"{calculated_data[3]}")
 
 
 
