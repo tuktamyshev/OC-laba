@@ -21,23 +21,6 @@ from collections import deque
 #     return data_for_table
 
 
-def calculate(data):
-    t, T, M, R, P = 0, 0, 0, 0, 0
-    for i in data:
-        l = len(i) - 1
-        T += l
-        t = i.count("И")
-        M += i.count("Г")
-        try:
-            R += t/l
-            P += l/t
-        except ZeroDivisionError:
-            pass
-
-    T, M, R, P = map(lambda x: round(x/(len(data)), 2), [T, M, R, P])
-    return [T, M, R, P]
-
-
 def work_with_data(data):
     data_for_table = [[f"Процесс {i}"] for i in range(1, len(data) + 1)]
     data = deque([[i, j] for i,j in data.items()])
@@ -57,3 +40,20 @@ def work_with_data(data):
         if current_process[1] != 0:
             data.append(current_process)
     return data_for_table
+
+
+def calculate(data):
+    t, T, M, R, P = 0, 0, 0, 0, 0
+    for i in data:
+        l = len(i) - 1
+        T += l
+        t = i.count("И")
+        M += i.count("Г")
+        try:
+            R += t/l
+            P += l/t
+        except ZeroDivisionError:
+            pass
+
+    T, M, R, P = map(lambda x: round(x/(len(data)), 2), [T, M, R, P])
+    return [T, M, R, P]
