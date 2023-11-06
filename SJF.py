@@ -8,7 +8,3 @@ def work_with_data(data):
         count_wait_time = len(s)
     return data_for_table
 
-
-def calculate(data):
-    #как RR
-    pass

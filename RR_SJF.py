@@ -21,7 +21,3 @@ def work_with_data(data):
         if current_process[1] != 0:
             sorted_data.append(current_process)
     return data_for_table
-
-def calculate(data):
-    # как RR
-    pass

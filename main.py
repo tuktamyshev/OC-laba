@@ -5,7 +5,6 @@ import PSJF
 import RR_SJF
 from tkinter import *
 from tkinter.ttk import Combobox, Scrollbar, Treeview
-from time import sleep
 
 
 class Interface:

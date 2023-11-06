@@ -23,7 +23,7 @@ from collections import deque
 
 def work_with_data(data):
     data_for_table = [[f"Процесс {i}"] for i in range(1, len(data) + 1)]
-    data = deque([[i, j] for i,j in data.items()])
+    data = deque([[i, j] for i, j in data.items()])
     s = sum(n for _, n in data)
     while s != 0:
         while data[0][1] == 0:
